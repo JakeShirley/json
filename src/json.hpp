@@ -7886,9 +7886,14 @@ class basic_json
             /// an index for arrays (used to create key names)
             size_t array_index = 0;
 
+            basic_json tmp;
+
           public:
+            std::string first;
+            typename IteratorType::reference second = tmp;
+
             explicit iteration_proxy_internal(IteratorType it) noexcept
-                : anchor(it)
+                : anchor(it), first(key())
             {}
 
             /// dereference operator (needed for range-based for)
@@ -7900,8 +7905,13 @@ class basic_json
             /// increment operator (needed for range-based for)
             iteration_proxy_internal& operator++()
             {
+                second = value();
+
                 ++anchor;
                 ++array_index;
+
+                // update first/second
+                first = key();
 
                 return *this;
             }
