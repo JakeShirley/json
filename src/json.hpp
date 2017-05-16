@@ -88,6 +88,10 @@ SOFTWARE.
     #define JSON_DEPRECATED
 #endif
 
+#ifndef NLOHMANN_JSON_NAMESPACE
+	#define NLOHMANN_JSON_NAMESPACE nlohmann
+#endif
+
 // allow to disable exceptions
 #if (defined(__cpp_exceptions) || defined(__EXCEPTIONS) || defined(_CPPUNWIND)) && not defined(JSON_NOEXCEPTION)
     #define JSON_THROW(exception) throw exception
@@ -113,7 +117,7 @@ SOFTWARE.
 @see https://github.com/nlohmann
 @since version 1.0.0
 */
-namespace nlohmann
+namespace NLOHMANN_JSON_NAMESPACE
 {
 
 /*!
@@ -1180,9 +1184,9 @@ struct adl_serializer
     */
     template<typename BasicJsonType, typename ValueType>
     static void from_json(BasicJsonType&& j, ValueType& val) noexcept(
-        noexcept(::nlohmann::from_json(std::forward<BasicJsonType>(j), val)))
+        noexcept(::NLOHMANN_JSON_NAMESPACE::from_json(std::forward<BasicJsonType>(j), val)))
     {
-        ::nlohmann::from_json(std::forward<BasicJsonType>(j), val);
+        ::NLOHMANN_JSON_NAMESPACE::from_json(std::forward<BasicJsonType>(j), val);
     }
 
     /*!
@@ -1196,9 +1200,9 @@ struct adl_serializer
     */
     template<typename BasicJsonType, typename ValueType>
     static void to_json(BasicJsonType& j, ValueType&& val) noexcept(
-        noexcept(::nlohmann::to_json(j, std::forward<ValueType>(val))))
+        noexcept(::NLOHMANN_JSON_NAMESPACE::to_json(j, std::forward<ValueType>(val))))
     {
-        ::nlohmann::to_json(j, std::forward<ValueType>(val));
+        ::NLOHMANN_JSON_NAMESPACE::to_json(j, std::forward<ValueType>(val));
     }
 };
 
@@ -14374,10 +14378,10 @@ namespace std
 @since version 1.0.0
 */
 template<>
-inline void swap(nlohmann::json& j1,
-                 nlohmann::json& j2) noexcept(
-                     is_nothrow_move_constructible<nlohmann::json>::value and
-                     is_nothrow_move_assignable<nlohmann::json>::value
+inline void swap(NLOHMANN_JSON_NAMESPACE::json& j1,
+                 NLOHMANN_JSON_NAMESPACE::json& j2) noexcept(
+                     is_nothrow_move_constructible<NLOHMANN_JSON_NAMESPACE::json>::value and
+                     is_nothrow_move_assignable<NLOHMANN_JSON_NAMESPACE::json>::value
                  )
 {
     j1.swap(j2);
@@ -14385,33 +14389,33 @@ inline void swap(nlohmann::json& j1,
 
 /// hash value for JSON objects
 template<>
-struct hash<nlohmann::json>
+struct hash<NLOHMANN_JSON_NAMESPACE::json>
 {
     /*!
     @brief return a hash value for a JSON object
 
     @since version 1.0.0
     */
-    std::size_t operator()(const nlohmann::json& j) const
+    std::size_t operator()(const NLOHMANN_JSON_NAMESPACE::json& j) const
     {
         // a naive hashing via the string representation
-        const auto& h = hash<nlohmann::json::string_t>();
+        const auto& h = hash<NLOHMANN_JSON_NAMESPACE::json::string_t>();
         return h(j.dump());
     }
 };
 
 /// specialization for std::less<value_t>
 template <>
-struct less<::nlohmann::detail::value_t>
+struct less<::NLOHMANN_JSON_NAMESPACE::detail::value_t>
 {
     /*!
     @brief compare two value_t enum values
     @since version 3.0.0
     */
-    bool operator()(nlohmann::detail::value_t lhs,
-                    nlohmann::detail::value_t rhs) const noexcept
+    bool operator()(NLOHMANN_JSON_NAMESPACE::detail::value_t lhs,
+                    NLOHMANN_JSON_NAMESPACE::detail::value_t rhs) const noexcept
     {
-        return nlohmann::detail::operator<(lhs, rhs);
+        return NLOHMANN_JSON_NAMESPACE::detail::operator<(lhs, rhs);
     }
 };
 
@@ -14430,9 +14434,9 @@ if no parse error occurred.
 
 @since version 1.0.0
 */
-inline nlohmann::json operator "" _json(const char* s, std::size_t n)
+inline NLOHMANN_JSON_NAMESPACE::json operator "" _json(const char* s, std::size_t n)
 {
-    return nlohmann::json::parse(s, s + n);
+    return NLOHMANN_JSON_NAMESPACE::json::parse(s, s + n);
 }
 
 /*!
@@ -14448,9 +14452,9 @@ object if no parse error occurred.
 
 @since version 2.0.0
 */
-inline nlohmann::json::json_pointer operator "" _json_pointer(const char* s, std::size_t n)
+inline NLOHMANN_JSON_NAMESPACE::json::json_pointer operator "" _json_pointer(const char* s, std::size_t n)
 {
-    return nlohmann::json::json_pointer(std::string(s, n));
+    return NLOHMANN_JSON_NAMESPACE::json::json_pointer(std::string(s, n));
 }
 
 // restore GCC/clang diagnostic settings
