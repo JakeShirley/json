@@ -100,9 +100,28 @@ SOFTWARE.
     #define JSON_TRY try
     #define JSON_CATCH(exception) catch(exception)
 #else
-    #define JSON_THROW(exception) std::abort()
+    #define JSON_THROW(exception) while(true) { exception_error_handler(exception); std::abort(); }
     #define JSON_TRY if(true)
     #define JSON_CATCH(exception) if(false)
+
+namespace NLOHMANN_JSON_NAMESPACE {
+	/*!
+	@brief callback for exceptional circumstances when exceptions are disabled
+
+	@note This function is called instead of throwing when JSON_NOEXCEPTION
+	is defined.  The user must implement this function and it can NOT return.
+	If this returns, results are undefined.
+
+	A simple definition might look like this:
+	void NLOHMANN_JSON_NAMESPACE::exception_error_handler(std::exception& e)
+	{
+		std::cout << "Json error: " << e.what() << "\n";
+		std::abort();
+	}
+
+	*/
+	void exception_error_handler(const std::exception& e);
+}
 #endif
 
 // manual branch prediction
