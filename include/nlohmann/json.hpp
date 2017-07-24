@@ -100,7 +100,7 @@ SOFTWARE.
     #define JSON_TRY try
     #define JSON_CATCH(exception) catch(exception)
 #else
-    #define JSON_THROW(exception) while(true) { exception_error_handler(exception); std::abort(); }
+    #define JSON_THROW(exception) while(true) { exception_error_handler(exception); }
     #define JSON_TRY if(true)
     #define JSON_CATCH(exception) if(false)
 
